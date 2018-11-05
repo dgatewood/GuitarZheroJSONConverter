@@ -32,35 +32,55 @@ public class JSON_Converter
         boolean song = false;
         boolean syncTrack = false;
         boolean events = false;
+        boolean hasPrinted = false;
+        boolean firstPass = true;
         out.write("{");
         out.newLine();
         while(scanner.hasNextLine())
         {
             String s = scanner.nextLine();
             System.out.println(s);
+
             String sStart = s.substring(0, s.indexOf("=") > 0 ? s.indexOf("=") : s.length());
             String sEnd = s.substring(s.indexOf("\"") > 0 ? s.indexOf("\"") : s.indexOf("=") > 0 ? s.indexOf("=") :0);
             if(expertSingle)
             {
                 System.out.println(sStart.trim());
-                if(!sStart.trim().equals("{") || !s.trim().equals("[ExpertSingle]") )
+                if(s.trim().equals("}"))
+                {
+                    expertSingle = false;
+                }
+                if(!(s.trim().equals("{") || s.trim().equals("}") || s.trim().equals("[ExpertSingle]")) )
+                {
+                    System.out.println("Expert Single is true");
+                    if(!hasPrinted)
                     {
-                System.out.println("Expert Single is true");
-                out.write("\"noteTimes\" : {");
-                out.newLine();
-                out.write("\"note\" : [");
-                System.out.println(s);
-                sStart = s.substring(0, s.indexOf("=") > 0 ? s.indexOf("=") : s.length());
-                int posFirstSpaceAfterEqual = s.indexOf(" ", s.indexOf("="));
-                System.out.println("The first space after = " + posFirstSpaceAfterEqual);
-                int posSecondSpaceAfterEqual = s.indexOf(" ", posFirstSpaceAfterEqual+1);
-                System.out.println("The second space after = " + posSecondSpaceAfterEqual);
-                String sType = s.substring(posFirstSpaceAfterEqual+1, posSecondSpaceAfterEqual);
-                String sLength = s.substring(posSecondSpaceAfterEqual+1);
-                sEnd = s.substring(s.indexOf("\"") > 0 ? s.indexOf("\"") : s.indexOf("=") > 0 ? s.indexOf("=") :0);
-                //out.write({"value": "New", "onclick": "CreateNewDoc()"},
-                out.write("{\"time\":"+ sStart + "\"type\":" + "\"" + sType.trim() + "\"" + 
-                    "\"length\":" + "\"" + sLength.trim() + "\"}");
+                        out.write("\"noteTimes\" : {");
+                        out.newLine();
+                        out.write("\"note\" : [");
+                        out.newLine();
+                        hasPrinted = true;
+                    }
+                    if(!firstPass)
+                    {
+                        out.write(",");
+                        out.newLine();
+                    }
+                    System.out.println("The string evaluated is: " + s);
+                    int posEquals = s.indexOf("=");
+                    System.out.println("position of equals: " + posEquals);
+                    sStart = s.substring(0, posEquals > 0 ? posEquals : s.length());
+                    int posFirstSpaceAfterEqual = s.indexOf(" ", posEquals);
+                    System.out.println("The first space after = " + posFirstSpaceAfterEqual);
+                    int posSecondSpaceAfterEqual = s.indexOf(" ", posFirstSpaceAfterEqual+1);
+                    System.out.println("The second space after = " + posSecondSpaceAfterEqual);
+                    String sType = s.substring(posFirstSpaceAfterEqual+1, posSecondSpaceAfterEqual);
+                    String sLength = s.substring(posSecondSpaceAfterEqual+1);
+                    sEnd = s.substring(s.indexOf("\"") > 0 ? s.indexOf("\"") : s.indexOf("=") > 0 ? s.indexOf("=") :0);
+                    //out.write({"value": "New", "onclick": "CreateNewDoc()"},
+                    out.write("{\"time\":"+ sStart + "\"type\":" + "\"" + sType.trim() + "\"" + 
+                        "\"length\":" + "\"" + sLength.trim() + "\"}");
+                    firstPass = false;
                 }
             }
             else if(sStart.trim().equals("Name"))
@@ -106,10 +126,12 @@ public class JSON_Converter
 
             }
 
-            
-            }
-
-
+        }
+        out.write("]");
+        out.newLine();
+        out.write("}");
+        out.newLine();
+        out.write("}");
         out.close();
     }
 }
