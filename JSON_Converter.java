@@ -73,13 +73,16 @@ public class JSON_Converter
                     int posFirstSpaceAfterEqual = s.indexOf(" ", posEquals);
                     System.out.println("The first space after = " + posFirstSpaceAfterEqual);
                     int posSecondSpaceAfterEqual = s.indexOf(" ", posFirstSpaceAfterEqual+1);
+                    int posThirdSpaceAfterEqual = s.indexOf(" ", posSecondSpaceAfterEqual+1);
                     System.out.println("The second space after = " + posSecondSpaceAfterEqual);
                     String sType = s.substring(posFirstSpaceAfterEqual+1, posSecondSpaceAfterEqual);
-                    String sLength = s.substring(posSecondSpaceAfterEqual+1);
+                    String sButton = s.substring(posSecondSpaceAfterEqual+1, posThirdSpaceAfterEqual);
+                    String sLength = s.substring(posThirdSpaceAfterEqual+1);
                     sEnd = s.substring(s.indexOf("\"") > 0 ? s.indexOf("\"") : s.indexOf("=") > 0 ? s.indexOf("=") :0);
                     //out.write({"value": "New", "onclick": "CreateNewDoc()"},
-                    out.write("{\"time\":"+ sStart + "\"type\":" + "\"" + sType.trim() + "\"" + 
-                        "\"length\":" + "\"" + sLength.trim() + "\"}");
+                    out.write("{\"time\":"+ sStart + ",\"type\":" + "\"" + sType.trim() + "\""+ 
+                        ",\"button\":"  + sButton.trim() +
+                        ",\"length\":"  + sLength.trim() + "}");
                     firstPass = false;
                 }
             }
@@ -95,7 +98,7 @@ public class JSON_Converter
             }
             else if(sStart.trim().equals("Album"))
             {
-                out.write("\"artist\" : " + sEnd+",");
+                out.write("\"album\" : " + sEnd+",");
                 out.newLine();
             }
             else if(sStart.trim().equals("Year"))
