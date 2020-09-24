@@ -20,7 +20,7 @@ public class JSON_Converter
         convertFile("notes.chart");
 
     }
-
+    //Primary Method of Action 
     public static void convertFile(String fileName) throws IOException {
         File file = new File(fileName);
         Scanner scanner = new Scanner(file);
