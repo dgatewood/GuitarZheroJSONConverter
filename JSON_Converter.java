@@ -1,8 +1,4 @@
 import java.util.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.*;
 /* Converter to turn clone hero music files into Guitar Zhero JSON file 
 Author: Derrick Gatewood
